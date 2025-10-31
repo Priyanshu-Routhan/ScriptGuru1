@@ -39,7 +39,7 @@ const Sidebar = ({ onSelectBoard }) => {
           value={newBoardName}
           onChange={(e) => setNewBoardName(e.target.value)}
           placeholder="New board name"
-          style={{ width: "100%", padding: "6px" }}
+          style={{ width: "93%", padding: "6px" }}
         />
         <button type="submit" style={{ width: "100%", marginTop: "5px" }}>
           ➕ Add

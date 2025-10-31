@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { getTasksByBoard, updateTask, deleteTask } from "../api/api";
 import TaskModal from "./TaskModal";
+import "../styles.css"; // Make sure your styles are loaded
 
 const BoardView = ({ board }) => {
   const [tasks, setTasks] = useState([]);
@@ -32,38 +33,42 @@ const BoardView = ({ board }) => {
     loadTasks();
   };
 
-  if (!board) return <div style={{ padding: "20px" }}>Select a board</div>;
+  if (!board) return <div className="no-board">Select a board</div>;
 
   return (
-    <div style={{ flex: 1, display: "flex", padding: "10px" }}>
+    <div className="board-view">
       {Object.keys(grouped).map((status) => (
-        <div key={status} style={{ flex: 1, margin: "0 10px" }}>
-          <h3>{status}</h3>
-          <div>
+        <div key={status} className="board-column">
+          <h3 className="board-column-title">{status}</h3>
+
+          <div className="task-list">
             {grouped[status].map((task) => (
-              <div
-                key={task._id}
-                style={{
-                  background: "#f7f7f7",
-                  padding: "10px",
-                  marginBottom: "10px",
-                  borderRadius: "8px",
-                }}
-              >
+              <div key={task._id} className="task-card">
                 <h4>{task.title}</h4>
                 <p>{task.description}</p>
                 <p>
                   <b>Priority:</b> {task.priority}
                 </p>
-                <select
-                  value={task.status}
-                  onChange={(e) => handleStatusChange(task._id, e.target.value)}
-                >
-                  <option>To Do</option>
-                  <option>In Progress</option>
-                  <option>Done</option>
-                </select>
-                <button onClick={() => handleDelete(task._id)}>🗑️</button>
+
+                <div className="task-actions">
+                  <select
+                    value={task.status}
+                    onChange={(e) =>
+                      handleStatusChange(task._id, e.target.value)
+                    }
+                    className="task-select"
+                  >
+                    <option>To Do</option>
+                    <option>In Progress</option>
+                    <option>Done</option>
+                  </select>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(task._id)}
+                  >
+                    🗑️
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -71,18 +76,21 @@ const BoardView = ({ board }) => {
       ))}
 
       <button
+        className="add-task-btn"
         onClick={() => setShowModal(true)}
-        style={{
-          position: "absolute",
-          bottom: "20px",
-          right: "20px",
-          padding: "10px 20px",
-        }}
       >
         ➕ New Task
       </button>
 
-      {showModal && <TaskModal boardId={board._id} onClose={() => { setShowModal(false); loadTasks(); }} />}
+      {showModal && (
+        <TaskModal
+          boardId={board._id}
+          onClose={() => {
+            setShowModal(false);
+            loadTasks();
+          }}
+        />
+      )}
     </div>
   );
 };
